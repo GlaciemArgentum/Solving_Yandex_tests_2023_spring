@@ -30,7 +30,6 @@ func main() {
 	x := float64(xInt)
 	tInt, _ := strconv.Atoi(params[2])
 	t := float64(tInt)
-
 	in, _ = buf.ReadString('\n')
 	dataStr := MyScan(in)
 	data := make([]Data, n, n)
