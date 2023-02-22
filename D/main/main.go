@@ -13,8 +13,17 @@ func MyScan(str string) []string {
 	return strings.Split(str, " ")
 }
 
-func main() {
-	buf := bufio.NewReader(os.Stdin)
+func RealMain() {
+	//buf := bufio.NewReader(os.Stdin)
+
+	f, err := os.Open("tests/test" + "1" + ".txt")
+	if err != nil {
+		panic(err)
+	}
+	defer func(f *os.File) {
+		_ = f.Close()
+	}(f)
+	buf := bufio.NewReader(f)
 
 	in, _ := buf.ReadString('\n')
 	n, _ := strconv.Atoi(MyScan(in)[0])
@@ -60,4 +69,8 @@ func main() {
 	}
 
 	fmt.Println(strings.Trim(fmt.Sprint(result), "[]"))
+}
+
+func main() {
+	RealMain()
 }
