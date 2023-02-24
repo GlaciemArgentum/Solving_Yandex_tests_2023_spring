@@ -20,17 +20,17 @@ type Data struct {
 	position int
 }
 
-func main() {
-	buf := bufio.NewReader(os.Stdin)
+func RealMain() {
+	//buf := bufio.NewReader(os.Stdin)
 
-	//f, err := os.Open("tests/test" + "1" + ".txt")
-	//if err != nil {
-	//	panic(err)
-	//}
-	//defer func(f *os.File) {
-	//	_ = f.Close()
-	//}(f)
-	//buf := bufio.NewReader(f)
+	f, err := os.Open("tests/test" + "1" + ".txt")
+	if err != nil {
+		panic(err)
+	}
+	defer func(f *os.File) {
+		_ = f.Close()
+	}(f)
+	buf := bufio.NewReader(f)
 
 	in, _ := buf.ReadString('\n')
 	inScan := MyScan(in)
@@ -59,6 +59,7 @@ func main() {
 		spell := make([]rune, 0, n)
 		letter := datas[i]
 		meets := make(map[int]int, n)
+		library := make(map[int]int, n)
 		preLen := 0
 		counter := 0
 		for j := 0; j < k; j++ {
@@ -66,9 +67,10 @@ func main() {
 			if meets[letter.letter] > 1 {
 				letter.letter = (letter.letter + (meets[letter.letter]-1)*letter.d) % 26
 			}
+			library[letter.letter]++
 			spell = append(spell, rune(letter.letter)+'a')
 			letter = datas[letter.next]
-			if len(meets) == preLen { //неправильно
+			if len(library) == preLen {
 				counter++
 				if counter == 26 {
 					break
@@ -76,7 +78,7 @@ func main() {
 			} else {
 				counter = 1
 			}
-			preLen = len(meets)
+			preLen = len(library)
 		}
 		word := string(spell)
 		lenWord := len(word)
@@ -93,20 +95,10 @@ func main() {
 			}
 		}
 		power += (k - lenWord) * lastPower
-
-		//var words []string
-		//for o := 'a'; o < 'a'+26; o++ {
-		//	word = strings.Replace(word, string(o), "_", 1)
-		//	word = strings.ReplaceAll(word, string(o), string(o-32))
-		//	words = strings.SplitAfter(word, string(o-32))
-		//	words = words[:len(words)-1]
-		//
-		//	position := 0
-		//	for _, z := range words {
-		//		position += len(z)
-		//		power -= k - position + 1
-		//	}
-		//}
 	}
 	fmt.Println(power)
+}
+
+func main() {
+	RealMain()
 }
