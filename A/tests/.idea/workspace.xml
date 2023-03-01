@@ -5,15 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f919c0dd-3573-4a8b-88cd-b008cf27fe4f" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/../main/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../main/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../main/go.mod" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../main/main.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../main/main_test.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/generator.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/go.mod" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../go.mod" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../main.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../main/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../main/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/tests.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/tests.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/generator.go" beforeDir="false" afterPath="$PROJECT_DIR$/generator.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../E/main/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/../../E/main/main.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../E/test/generator.go" beforeDir="false" afterPath="$PROJECT_DIR$/../../E/test/generator.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -46,6 +43,23 @@
     <property name="go.sdk.automatically.set" value="true" />
     <property name="go.watchers.conflict.with.on.save.actions.check.performed" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="settings.editor.selected.configurable" value="com.goide.configuration.GoProjectSettingsConfigurable" />
+  </component>
+  <component name="RunManager">
+    <configuration name="go build generator.go" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
+      <module name="tests" />
+      <working_directory value="$PROJECT_DIR$" />
+      <kind value="FILE" />
+      <package value="tests" />
+      <directory value="$PROJECT_DIR$" />
+      <filePath value="$PROJECT_DIR$/generator.go" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Go Build.go build generator.go" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TypeScriptGeneratedFilesManager">

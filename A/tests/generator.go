@@ -1,4 +1,4 @@
-package gen
+package main
 
 import (
 	"fmt"
@@ -13,9 +13,11 @@ const (
 	nConst   = 200000
 	idConst  = 1_000_000_000
 	rowConst = 1_000_000_000
+
+	countConst = 1
 )
 
-func Contains(a []string, x string) bool {
+func Contains(a []int, x int) bool {
 	for _, n := range a {
 		if x == n {
 			return true
@@ -27,25 +29,26 @@ func Contains(a []string, x string) bool {
 func Generate(name string) {
 	rand.Seed(time.Now().Unix())
 
-	n := rand.Intn(nConst) + 1
+	n := nConst
+	//n := rand.Intn(nConst) + 1
 
-	ids := make([]string, 0, n)
-	rows := make([]string, 0, n)
-	id := ""
+	ids := make([]int, 0, n)
+	rows := make([]int, 0, n)
+	id := 0
 
 	for i := 0; i < n; i++ {
-		id = strconv.Itoa(rand.Intn(idConst + 1))
+		id = rand.Intn(idConst + 1)
 		if Contains(ids, id) {
 			i--
 			continue
 		}
 		ids = append(ids, id)
-		rows = append(rows, strconv.Itoa(rand.Intn(rowConst)+1))
+		rows = append(rows, rand.Intn(rowConst)+1)
 	}
 
 	k := rand.Intn(nConst) + 1
 
-	text := make([]string, 0, k)
+	text := make([]int, 0, k)
 	for i := 0; i < k; i++ {
 		text = append(text, ids[rand.Intn(n)])
 	}
@@ -55,14 +58,14 @@ func Generate(name string) {
 		_ = file.Close()
 	}(file)
 	_, _ = file.WriteString(fmt.Sprintf("%d\n", n))
-	_, _ = file.WriteString(fmt.Sprintf("%s\n", strings.Join(ids, " ")))
-	_, _ = file.WriteString(fmt.Sprintf("%s\n", strings.Join(rows, " ")))
+	_, _ = file.WriteString(fmt.Sprintf("%s\n", strings.Trim(fmt.Sprint(ids), "[]")))
+	_, _ = file.WriteString(fmt.Sprintf("%s\n", strings.Trim(fmt.Sprint(rows), "[]")))
 	_, _ = file.WriteString(fmt.Sprintf("%d\n", k))
-	_, _ = file.WriteString(fmt.Sprintf("%s\n", strings.Join(text, " ")))
+	_, _ = file.WriteString(fmt.Sprintf("%s\n", strings.Trim(fmt.Sprint(text), "[]")))
 }
 
 func main() {
-	for i := 0; i < 10; i++ {
+	for i := 0; i < countConst; i++ {
 		Generate(strconv.Itoa(i))
 	}
 }

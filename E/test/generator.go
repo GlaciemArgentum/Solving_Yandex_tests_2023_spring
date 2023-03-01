@@ -12,17 +12,17 @@ import (
 const (
 	countOfFiles = 1
 
-	nConst = 100_000
-	kConst = 1_000_000_000
+	nConst = 20  //100_000
+	kConst = 300 //1_000_000_000
 )
 
 func Generate(name string) {
 	rand.Seed(time.Now().Unix())
 
-	//n := nConst
-	n := rand.Intn(nConst) + 1
-	//k := kConst
-	k := rand.Intn(kConst) + 1
+	n := nConst
+	//n := rand.Intn(nConst) + 1
+	k := kConst
+	//k := rand.Intn(kConst) + 1
 
 	book := ""
 	p := make([]int, 0, n)

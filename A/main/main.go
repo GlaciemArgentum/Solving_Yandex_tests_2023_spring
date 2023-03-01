@@ -13,7 +13,7 @@ func MyScan(str string) []string {
 	return strings.Split(str, " ")
 }
 
-func main() {
+func RealMain() {
 	buf := bufio.NewReader(os.Stdin)
 	//
 	//f, err := os.Open("tests/" + "0" + ".txt")
@@ -54,4 +54,8 @@ func main() {
 		}
 	}
 	fmt.Println(counter)
+}
+
+func main() {
+	RealMain()
 }

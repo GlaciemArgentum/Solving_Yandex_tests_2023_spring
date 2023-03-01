@@ -1,10 +1,11 @@
 package main
 
 import (
-	"os"
 	"testing"
 )
 
-func TestMain(m *testing.M) {
-	os.Exit(m.Run())
+func BenchmarkRealMain(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		RealMain()
+	}
 }
