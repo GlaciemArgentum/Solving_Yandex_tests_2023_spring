@@ -1,1 +1,1 @@
-module C
+module main
