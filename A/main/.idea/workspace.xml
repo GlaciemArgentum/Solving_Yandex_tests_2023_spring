@@ -5,24 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0d453546-6140-4e29-9260-58e373483340" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/main.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main_test.go" beforeDir="false" afterPath="$PROJECT_DIR$/main_test.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/0.txt" beforeDir="false" afterPath="$PROJECT_DIR$/tests/0.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/1.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/2.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/3.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/4.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/5.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/6.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/7.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/8.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/9.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../tests/.idea/tests.iml" beforeDir="false" afterPath="$PROJECT_DIR$/../tests/.idea/tests.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../tests/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../tests/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../tests/generator.go" beforeDir="false" afterPath="$PROJECT_DIR$/../tests/generator.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../E/main/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/../../E/main/main.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../E/test/generator.go" beforeDir="false" afterPath="$PROJECT_DIR$/../../E/test/generator.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -76,6 +59,10 @@
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="update" />
+    <option name="LAST_COMMIT_MESSAGE" value="update" />
   </component>
   <component name="VgoProject">
     <integration-enabled>true</integration-enabled>
