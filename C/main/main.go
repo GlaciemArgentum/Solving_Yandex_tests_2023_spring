@@ -36,25 +36,50 @@ func RealMain() {
 	in, _ = buf.ReadString('\n')
 	dataStr := MyScan(in)
 
-	data := make([]Data, n, n)
+	dataBig := make([]Data, n, n)
 	for i := 0; i < n; i++ {
-		data[i].curr, _ = strconv.ParseFloat(dataStr[i], 64)
-		data[i].day = i + 1
+		dataBig[i].curr, _ = strconv.ParseFloat(dataStr[i], 64)
+		dataBig[i].day = i + 1
 	}
 
-	dataCopy := make([]Data, n, n)
+	preCurr := 10_001.0
+	minBorder := 0
+	maxBorder := n
+	flag := 0
+	for i := 0; i < n; i++ {
+		if dataBig[i].curr > preCurr {
+			minBorder = i - 1
+			flag++
+			break
+		}
+		preCurr = dataBig[i].curr
+	}
+	if flag == 0 {
+		fmt.Printf("0\n")
+	}
+	preCurr = 0
+	for i := n - 1; i >= 0; i-- {
+		if dataBig[i].curr < preCurr {
+			maxBorder = i + 2
+			break
+		}
+		preCurr = dataBig[i].curr
+	}
+	data := dataBig[minBorder:maxBorder]
+	lenData := len(data)
+
+	dataCopy := make([]Data, lenData, lenData)
 	_ = copy(dataCopy, data)
 	sort.SliceStable(dataCopy, func(i, j int) bool { return dataCopy[i].curr < dataCopy[j].curr })
-	max := dataCopy[n-1]
+	max := dataCopy[lenData-1]
 	min := dataCopy[0]
 
-	maxWealth := make([]float64, 3, 3)
-	maxWealth[0] = 1
-	days := make([][]int, 3, 3)
+	maxWealth := make([]float64, 2, 2)
+	days := make([][]int, 2, 2)
 
 	if max.day > min.day {
-		maxWealth[1] = max.curr / min.curr
-		days[1] = []int{min.day, max.day}
+		maxWealth[0] = max.curr / min.curr
+		days[0] = []int{min.day, max.day}
 	} else {
 		var minLocal Data
 		if max.day > 1 {
@@ -68,11 +93,11 @@ func RealMain() {
 		}
 
 		var maxLocal Data
-		if min.day < n {
-			dataCopyMin := make([]Data, n-min.day, n-min.day)
+		if min.day < lenData {
+			dataCopyMin := make([]Data, lenData-min.day, lenData-min.day)
 			_ = copy(dataCopyMin, data[min.day:])
 			sort.SliceStable(dataCopyMin, func(i, j int) bool { return dataCopyMin[i].curr < dataCopyMin[j].curr })
-			maxLocal = dataCopyMin[n-min.day-1]
+			maxLocal = dataCopyMin[lenData-min.day-1]
 		} else {
 			maxLocal.day = -1
 			maxLocal.curr = -1
@@ -81,20 +106,18 @@ func RealMain() {
 		curr1 := max.curr / minLocal.curr
 		curr2 := maxLocal.curr / min.curr
 		if minLocal.day > 0 && curr1 >= curr2 {
-			maxWealth[1] = curr1
-			days[1] = []int{minLocal.day, max.day}
+			maxWealth[0] = curr1
+			days[0] = []int{minLocal.day, max.day}
 		} else if maxLocal.day > 0 && curr2 >= curr1 {
-			maxWealth[1] = curr2
-			days[1] = []int{min.day, maxLocal.day}
+			maxWealth[0] = curr2
+			days[0] = []int{min.day, maxLocal.day}
 		}
 	}
 
-	if maxWealth[0] >= maxWealth[1] && maxWealth[0] >= maxWealth[2] {
-		fmt.Printf("0\n")
-	} else if maxWealth[1] >= maxWealth[0] && maxWealth[1] >= maxWealth[2] {
-		fmt.Printf("1\n%d %d\n", days[1][0], days[1][1])
-	} else if maxWealth[2] >= maxWealth[0] && maxWealth[2] >= maxWealth[1] {
-		fmt.Printf("2\n%d %d\n%d %d\n", days[2][0], days[2][1], days[2][2], days[2][3])
+	if maxWealth[0] >= maxWealth[1] {
+		fmt.Printf("1\n%d %d\n", days[0][0], days[0][1])
+	} else {
+		fmt.Printf("2\n%d %d\n%d %d\n", days[1][0], days[1][1], days[1][2], days[1][3])
 	}
 
 }
