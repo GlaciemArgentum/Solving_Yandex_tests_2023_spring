@@ -13,10 +13,18 @@ type Data struct {
 	curr float64
 }
 
+type Deal struct {
+	total float64
+	buy   int
+	sell  int
+}
+
 type TwoDeals struct {
 	total float64
-	buy   Data
-	sell  Data
+	buy1  int
+	sell1 int
+	buy2  int
+	sell2 int
 }
 
 func MyScan(str string) []string {
@@ -89,24 +97,52 @@ func DeleteRepeat(input []Data) []Data {
 	return output
 }
 
-// GetMinMax возвращает min, max
-func GetMinMax(input []Data) (Data, Data) {
+// GetMin возвращает minPosition, min
+func GetMin(input []Data) (int, Data) {
 	if len(input) == 0 {
-		return Data{}, Data{}
+		return -1, Data{}
 	}
 
 	min := input[0]
-	max := input[0]
-	var value float64
-	for _, i := range input {
-		value = i.curr
-		if value > max.curr {
-			max = i
-		} else if value < min.curr {
-			min = i
+	minPosition := 0
+	for i, data := range input {
+		if data.curr < min.curr {
+			min = data
+			minPosition = i
 		}
 	}
-	return min, max
+	return minPosition, min
+}
+
+// GetMax возвращает maxPosition, max
+func GetMax(input []Data) (int, Data) {
+	if len(input) == 0 {
+		return -1, Data{}
+	}
+
+	max := input[0]
+	maxPosition := 0
+	for i, data := range input {
+		if data.curr > max.curr {
+			max = data
+			maxPosition = i
+		}
+	}
+	return maxPosition, max
+}
+
+// CheckData возвращает false, если дат > 2, иначе true. Также выводит []Data{}, которые приведут к увеличению прибыли.
+func CheckData(input []Data) (bool, []int) {
+	lenData := len(input)
+	if lenData >= 3 {
+		return false, []int{}
+	}
+	if lenData == 2 {
+		if input[0].curr < input[1].curr {
+			return true, []int{input[0].day, input[1].day}
+		}
+	}
+	return true, []int{}
 }
 
 func Input() (int, []Data) {
@@ -134,44 +170,89 @@ func Input() (int, []Data) {
 	return n, data
 }
 
-func Output(k int, days []int) {
-	if k == 2 {
+func Output(days []int) {
+	lenData := len(days)
+	if lenData == 4 {
 		fmt.Printf("2\n%d %d\n%d %d\n", days[0], days[1], days[2], days[3])
 		return
-	} else if k == 1 {
+	} else if lenData == 2 {
 		fmt.Printf("1\n%d %d\n", days[0], days[1])
 		return
-	} else if k == 0 {
+	} else if lenData == 0 {
 		fmt.Printf("0\n")
 		return
 	}
 }
 
+// BestDeal возвращает
+func BestDeal(input []Data) Deal {
+	input = TrimReduce(input)
+
+	lenData := len(input)
+	if lenData == 2 {
+
+		return Deal{input[1].curr / input[0].curr, input[0].day, input[1].day}
+	}
+	if lenData == 0 || lenData == 1 {
+		return Deal{0, -1, -1}
+	}
+
+	minPosition, min := GetMin(input)
+	maxPosition, max := GetMax(input)
+	if min.day < max.day {
+		return Deal{max.curr / min.curr, min.day, max.day}
+	}
+
+	_, localMin := GetMin(input[:maxPosition])
+	_, localMax := GetMax(input[minPosition+1:])
+
+	leftDeal := Deal{max.curr / localMin.curr, localMin.day, max.day}
+	rightDeal := Deal{localMax.curr / min.curr, min.day, localMax.day}
+	middleDeal := BestDeal(input[maxPosition+1 : minPosition])
+
+	switch {
+	case leftDeal.total >= rightDeal.total && leftDeal.total >= middleDeal.total:
+		return leftDeal
+	case rightDeal.total >= middleDeal.total:
+		return rightDeal
+	}
+	return middleDeal
+}
+
 func RealMain() {
 	n, data := Input()
+	if flag, days := CheckData(data); flag {
+		Output(days)
+		return
+	}
+	data = DeleteRepeat(TrimReduce(data))
+	if flag, days := CheckData(data); flag {
+		Output(days)
+		return
+	}
 
-	lenData := len(data)
-	if lenData < 3 {
-		switch {
-		case lenData == 1:
-			Output(0, []int{})
-			return
-		case lenData == 2:
-			if data[0].curr < data[1].curr {
-				Output(1, []int{1, 2})
-			} else {
-				Output(0, []int{})
-			}
-			return
+	oneDeal := BestDeal(data)
+
+	twoDealsSlice := make([]TwoDeals, 0, n)
+	for i := 2; i < n-1; i++ {
+		leftDeal := BestDeal(data[:i])
+		rightDeal := BestDeal(data[i:])
+		twoDealsSlice = append(twoDealsSlice, TwoDeals{leftDeal.total * rightDeal.total, leftDeal.buy, leftDeal.sell, rightDeal.buy, rightDeal.sell})
+	}
+
+	twoDeal := twoDealsSlice[0]
+	for _, deal := range twoDealsSlice {
+		if deal.total > twoDeal.total {
+			twoDeal = deal
 		}
 	}
 
-	data = DeleteRepeat(TrimReduce(data))
-	lenData = len(data)
-
-	min, max := GetMinMax(data)
-
-	twoDealsSlice := make([]TwoDeals, 0, n)
+	switch {
+	case oneDeal.total <= 1 && twoDeal.total <= 1:
+		Output([]int{})
+	case oneDeal.total >= twoDeal.total:
+		Output([]int{})
+	}
 }
 
 func main() {
