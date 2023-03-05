@@ -78,10 +78,12 @@ func TrimReduce(input []Data) []Data {
 
 // DeleteRepeat удаляет дни, в которые повторяется рост или падение
 func DeleteRepeat(input []Data) []Data {
-	if len(input) < 3 {
+	lenData := len(input)
+	if lenData < 3 {
 		return input
 	}
-	output := make([]Data, 0, len(input))
+	output := make([]Data, 0, lenData)
+	output = append(output, input[0])
 
 	prePre := input[0].curr
 	pre := input[1]
@@ -94,6 +96,7 @@ func DeleteRepeat(input []Data) []Data {
 		}
 		pre = i
 	}
+	output = append(output, input[lenData-1])
 	return output
 }
 
@@ -146,16 +149,16 @@ func CheckData(input []Data) (bool, []int) {
 }
 
 func Input() (int, []Data) {
-	buf := bufio.NewReader(os.Stdin)
+	//buf := bufio.NewReader(os.Stdin)
 
-	//f, err := os.Open("tests/test" + "2" + ".txt")
-	//if err != nil {
-	//	panic(err)
-	//}
-	//defer func(f *os.File) {
-	//	_ = f.Close()
-	//}(f)
-	//buf := bufio.NewReader(f)
+	f, err := os.Open("input.txt")
+	if err != nil {
+		panic(err)
+	}
+	defer func(f *os.File) {
+		_ = f.Close()
+	}(f)
+	buf := bufio.NewReader(f)
 
 	in, _ := buf.ReadString('\n')
 	n, _ := strconv.Atoi(MyScan(in)[0])
@@ -190,7 +193,6 @@ func BestDeal(input []Data) Deal {
 
 	lenData := len(input)
 	if lenData == 2 {
-
 		return Deal{input[1].curr / input[0].curr, input[0].day, input[1].day}
 	}
 	if lenData == 0 || lenData == 1 {
@@ -234,7 +236,7 @@ func RealMain() {
 	oneDeal := BestDeal(data)
 
 	twoDealsSlice := make([]TwoDeals, 0, n)
-	for i := 2; i < n-1; i++ {
+	for i := 2; i < len(data)-1; i++ {
 		leftDeal := BestDeal(data[:i])
 		rightDeal := BestDeal(data[i:])
 		twoDealsSlice = append(twoDealsSlice, TwoDeals{leftDeal.total * rightDeal.total, leftDeal.buy, leftDeal.sell, rightDeal.buy, rightDeal.sell})
@@ -251,7 +253,9 @@ func RealMain() {
 	case oneDeal.total <= 1 && twoDeal.total <= 1:
 		Output([]int{})
 	case oneDeal.total >= twoDeal.total:
-		Output([]int{})
+		Output([]int{oneDeal.buy, oneDeal.sell})
+	default:
+		Output([]int{twoDeal.buy1, twoDeal.sell1, twoDeal.buy2, twoDeal.sell2})
 	}
 }
 

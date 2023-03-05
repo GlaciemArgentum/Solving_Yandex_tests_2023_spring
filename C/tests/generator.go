@@ -12,8 +12,8 @@ import (
 const (
 	countOfFiles = 1
 
-	nConst = 20 //300_000
-	kConst = 10 //10_000
+	nConst = 100_000 //300_000
+	kConst = 10_000
 )
 
 func Generate(name string) {
@@ -30,7 +30,7 @@ func Generate(name string) {
 		d = append(d, rand.Intn(k)+1)
 	}
 
-	file, _ := os.Create("test" + name + ".txt")
+	file, _ := os.Create("input.txt")
 	defer func(file *os.File) {
 		_ = file.Close()
 	}(file)
