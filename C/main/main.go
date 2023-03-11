@@ -6,6 +6,7 @@ import (
 	"os"
 	"strconv"
 	"strings"
+	"sync"
 )
 
 type Data struct {
@@ -32,7 +33,6 @@ func MyScan(str string) []string {
 	return strings.Split(str, " ")
 }
 
-// TrimReduce убирает падение с обоих концов среза
 func TrimReduce(input []Data) []Data {
 	lenInput := len(input)
 
@@ -76,7 +76,6 @@ func TrimReduce(input []Data) []Data {
 	return input[minBorder:maxBorder]
 }
 
-// DeleteRepeat удаляет дни, в которые повторяется рост или падение
 func DeleteRepeat(input []Data) []Data {
 	lenData := len(input)
 	if lenData < 3 {
@@ -100,7 +99,6 @@ func DeleteRepeat(input []Data) []Data {
 	return output
 }
 
-// GetMin возвращает minPosition, min
 func GetMin(input []Data) (int, Data) {
 	if len(input) == 0 {
 		return -1, Data{}
@@ -117,7 +115,6 @@ func GetMin(input []Data) (int, Data) {
 	return minPosition, min
 }
 
-// GetMax возвращает maxPosition, max
 func GetMax(input []Data) (int, Data) {
 	if len(input) == 0 {
 		return -1, Data{}
@@ -134,7 +131,6 @@ func GetMax(input []Data) (int, Data) {
 	return maxPosition, max
 }
 
-// CheckData возвращает false, если дат > 2, иначе true. Также выводит []Data{}, которые приведут к увеличению прибыли.
 func CheckData(input []Data) (bool, []int) {
 	lenData := len(input)
 	if lenData >= 3 {
@@ -149,8 +145,6 @@ func CheckData(input []Data) (bool, []int) {
 }
 
 func Input() (int, []Data) {
-	//buf := bufio.NewReader(os.Stdin)
-
 	f, err := os.Open("input.txt")
 	if err != nil {
 		panic(err)
@@ -175,19 +169,22 @@ func Input() (int, []Data) {
 
 func Output(days []int) {
 	lenData := len(days)
+	file, _ := os.Create("output.txt")
+	defer func(file *os.File) {
+		_ = file.Close()
+	}(file)
 	if lenData == 4 {
-		fmt.Printf("2\n%d %d\n%d %d\n", days[0], days[1], days[2], days[3])
+		_, _ = file.WriteString(fmt.Sprintf("2\n%d %d\n%d %d\n", days[0], days[1], days[2], days[3]))
 		return
 	} else if lenData == 2 {
-		fmt.Printf("1\n%d %d\n", days[0], days[1])
+		_, _ = file.WriteString(fmt.Sprintf("1\n%d %d\n", days[0], days[1]))
 		return
 	} else if lenData == 0 {
-		fmt.Printf("0\n")
+		_, _ = file.WriteString(fmt.Sprintf("0\n"))
 		return
 	}
 }
 
-// BestDeal возвращает
 func BestDeal(input []Data) Deal {
 	input = TrimReduce(input)
 
@@ -221,7 +218,10 @@ func BestDeal(input []Data) Deal {
 	return middleDeal
 }
 
-func RealMain() {
+func main() {
+	wg := new(sync.WaitGroup)
+	mu := new(sync.Mutex)
+
 	n, data := Input()
 	if flag, days := CheckData(data); flag {
 		Output(days)
@@ -237,11 +237,18 @@ func RealMain() {
 
 	twoDealsSlice := make([]TwoDeals, 0, n)
 	for i := 2; i < len(data)-1; i++ {
-		leftDeal := BestDeal(data[:i])
-		rightDeal := BestDeal(data[i:])
-		twoDealsSlice = append(twoDealsSlice, TwoDeals{leftDeal.total * rightDeal.total, leftDeal.buy, leftDeal.sell, rightDeal.buy, rightDeal.sell})
+		wg.Add(1)
+		go func(i int, wg *sync.WaitGroup, mu *sync.Mutex) {
+			defer wg.Done()
+			leftDeal := BestDeal(data[:i])
+			rightDeal := BestDeal(data[i:])
+			mu.Lock()
+			twoDealsSlice = append(twoDealsSlice, TwoDeals{leftDeal.total * rightDeal.total, leftDeal.buy, leftDeal.sell, rightDeal.buy, rightDeal.sell})
+			mu.Unlock()
+		}(i, wg, mu)
 	}
 
+	wg.Wait()
 	twoDeal := twoDealsSlice[0]
 	for _, deal := range twoDealsSlice {
 		if deal.total > twoDeal.total {
@@ -257,8 +264,4 @@ func RealMain() {
 	default:
 		Output([]int{twoDeal.buy1, twoDeal.sell1, twoDeal.buy2, twoDeal.sell2})
 	}
-}
-
-func main() {
-	RealMain()
 }

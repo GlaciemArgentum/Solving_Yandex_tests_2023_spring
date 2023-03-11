@@ -20,17 +20,15 @@ func MyScan(str string) []string {
 	return strings.Split(str, " ")
 }
 
-func RealMain() {
-	buf := bufio.NewReader(os.Stdin)
-
-	//f, err := os.Open("tests/test" + "1" + ".txt")
-	//if err != nil {
-	//	panic(err)
-	//}
-	//defer func(f *os.File) {
-	//	_ = f.Close()
-	//}(f)
-	//buf := bufio.NewReader(f)
+func main() {
+	f, err := os.Open("input.txt")
+	if err != nil {
+		panic(err)
+	}
+	defer func(f *os.File) {
+		_ = f.Close()
+	}(f)
+	buf := bufio.NewReader(f)
 
 	in, _ := buf.ReadString('\n')
 	params := MyScan(in)
@@ -65,14 +63,8 @@ func RealMain() {
 		_ = file.Close()
 	}(file)
 	_, _ = file.WriteString(fmt.Sprintf("%d\n", len(onTime)))
-	//fmt.Println(len(onTime))
 
 	if len(onTime) > 0 {
 		_, _ = file.WriteString(fmt.Sprintf("%s\n", strings.Trim(fmt.Sprint(onTime), "[]")))
-		//fmt.Println(strings.Trim(fmt.Sprint(onTime), "[]"))
 	}
-}
-
-func main() {
-	RealMain()
 }

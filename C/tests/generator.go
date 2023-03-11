@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"math/rand"
 	"os"
-	"strconv"
 	"strings"
 	"time"
 )
@@ -12,11 +11,11 @@ import (
 const (
 	countOfFiles = 1
 
-	nConst = 100_000 //300_000
+	nConst = 10_000 //300_000
 	kConst = 10_000
 )
 
-func Generate(name string) {
+func Generate() {
 	rand.Seed(time.Now().Unix())
 
 	n := nConst
@@ -40,6 +39,6 @@ func Generate(name string) {
 
 func main() {
 	for i := 1; i <= countOfFiles; i++ {
-		Generate(strconv.Itoa(i))
+		Generate()
 	}
 }

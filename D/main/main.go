@@ -6,6 +6,7 @@ import (
 	"os"
 	"strconv"
 	"strings"
+	"sync"
 )
 
 func MyScan(str string) []string {
@@ -14,9 +15,7 @@ func MyScan(str string) []string {
 }
 
 func RealMain() {
-	//buf := bufio.NewReader(os.Stdin)
-
-	f, err := os.Open("tests/test" + "1" + ".txt")
+	f, err := os.Open("input.txt")
 	if err != nil {
 		panic(err)
 	}
@@ -43,37 +42,45 @@ func RealMain() {
 	in, _ = buf.ReadString('\n')
 	parentsStudent := MyScan(in)
 
+	wg := new(sync.WaitGroup)
+	mu := new(sync.Mutex)
+
 	incomeCountry := 0
 	parents := 0
 	income := 0
 	result := make([]int, q, q)
 	for i := 0; i < q; i++ {
-		income, _ = strconv.Atoi(incomeStudent[i])
-		parents, _ = strconv.Atoi(parentsStudent[i])
-		if parents != 0 && parentsCountry[parents-1] == "1" {
-			result[i] = parents
-		}
-		for j := 0; j < n; j++ {
-			if result[i] != 0 && result[i]-1 <= j {
-				break
+		wg.Add(1)
+		go func(i int, wg *sync.WaitGroup, mu *sync.Mutex) {
+			defer wg.Done()
+			income, _ = strconv.Atoi(incomeStudent[i])
+			parents, _ = strconv.Atoi(parentsStudent[i])
+			if parents != 0 && parentsCountry[parents-1] == "1" {
+				result[i] = parents
 			}
-			if eduCountry[j] == "1" && eduStudent[i] == "0" {
-				continue
+			for j := 0; j < n; j++ {
+				if result[i] != 0 && result[i]-1 <= j {
+					break
+				}
+				if eduCountry[j] == "1" && eduStudent[i] == "0" {
+					continue
+				}
+				incomeCountry, _ = strconv.Atoi(incomeCountryStr[j])
+				if income >= incomeCountry {
+					result[i] = j + 1
+					break
+				}
 			}
-			incomeCountry, _ = strconv.Atoi(incomeCountryStr[j])
-			if income >= incomeCountry {
-				result[i] = j + 1
-				break
-			}
-		}
+		}(i, wg, mu)
 	}
+
+	wg.Wait()
 
 	file, _ := os.Create("output.txt")
 	defer func(file *os.File) {
 		_ = file.Close()
 	}(file)
 	_, _ = file.WriteString(fmt.Sprintf("%s\n", strings.Trim(fmt.Sprint(result), "[]")))
-	//fmt.Println(strings.Trim(fmt.Sprint(result), "[]"))
 }
 
 func main() {

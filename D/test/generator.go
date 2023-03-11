@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"math/rand"
 	"os"
-	"strconv"
 	"strings"
 )
 
@@ -16,7 +15,7 @@ const (
 	incomeConst   = 1_000_000_000 //максимальный доход
 )
 
-func Generate(name string) {
+func Generate() {
 	//rand.Seed(time.Now().Unix())
 
 	n := countryConst //rand.Intn(countryConst) + 1
@@ -43,7 +42,7 @@ func Generate(name string) {
 		parentsC = append(parentsC, rand.Intn(n+1))
 	}
 
-	file, _ := os.Create("test" + name + ".txt")
+	file, _ := os.Create("input.txt")
 	defer func(file *os.File) {
 		_ = file.Close()
 	}(file)
@@ -59,7 +58,7 @@ func Generate(name string) {
 
 func main() {
 	for i := 1; i <= countOfFiles; i++ {
-		Generate(strconv.Itoa(i))
+		Generate()
 
 	}
 }

@@ -20,17 +20,15 @@ type Data struct {
 	position int
 }
 
-func RealMain() {
-	buf := bufio.NewReader(os.Stdin)
-
-	//f, err := os.Open("tests/test" + "2" + ".txt")
-	//if err != nil {
-	//	panic(err)
-	//}
-	//defer func(f *os.File) {
-	//	_ = f.Close()
-	//}(f)
-	//buf := bufio.NewReader(f)
+func main() {
+	f, err := os.Open("input.txt")
+	if err != nil {
+		panic(err)
+	}
+	defer func(f *os.File) {
+		_ = f.Close()
+	}(f)
+	buf := bufio.NewReader(f)
 
 	in, _ := buf.ReadString('\n')
 	inScan := MyScan(in)
@@ -59,29 +57,19 @@ func RealMain() {
 		//letterLibrary[data.letter] = append(letterLibrary[data.letter], i)
 	}
 
-	var power int                        // Мощность заклинания.
-	letterStart := datas[datas[0].next]  // Первая буква заклинания
-	libraryStart := make(map[int]int, n) // Буквы (их позиции в book), с которых начиналось заклинание.
+	var power int
+	letterStart := datas[datas[0].next]
+	libraryStart := make(map[int]int, n)
 	libraryStart[letterStart.position]++
-	//var preSpell []rune
-	//preMeets := make(map[int]int, n)
-	//preLibrary := make(map[int]int, n)
+
 	for i := 0; i < n; i++ {
-		letter := letterStart           // Выбранная буква.
-		spell := make([]rune, 0, 26)    // Текст заклинания.
-		meets := make(map[int]int, n)   // Буквы, которые были прочитаны из book (и сколько раз).
-		library := make(map[int]int, n) // Буквы, которые были добавлены в spell (И сколько раз).
-		preLen := 0                     // Ранее зафиксированная длина library.
-		counter := 0                    // Счётчик, сколько раз не изменялась длина library.
-		//if len(preSpell) != 0 {
-		//	spell = preSpell[1:]
-		//	meets = preMeets
-		//	meets[letterStart.letter]--
-		//	library = preLibrary
-		//	for z := 0; z < len(letterLibrary[letterStart.letter]); z++ {
-		//		spell[letterLibrary[letterStart.letter][z]] = rune((int(spell[letterLibrary[letterStart.letter][z]]-'a')-(z+1)*datas[letterLibrary[letterStart.letter][z]].d+26)%26) + 'a'
-		//	}
-		//}
+		letter := letterStart
+		spell := make([]rune, 0, 26)
+		meets := make(map[int]int, n)
+		library := make(map[int]int, n)
+		preLen := 0
+		counter := 0
+
 		for j := len(spell); j < k; j++ {
 			meets[letter.letter]++
 			if meets[letter.letter] > 1 {
@@ -116,32 +104,20 @@ func RealMain() {
 		}
 		power += (k - lenWord) * lastPower
 
-		//
-		//fmt.Println(strings.Repeat(" ", i), word)
-		//
-
 		letterStart = datas[letterStart.next]
 		if _, inMap := libraryStart[letterStart.position]; inMap {
-			//
-			//fmt.Println()
-			//
+
 			for _, newLetterStart := range datas {
 				if _, inMap2 := libraryStart[newLetterStart.position]; !inMap2 {
 					letterStart = newLetterStart
 					break
 				}
 			}
-			//preSpell = []rune{}
+
 		}
 		libraryStart[letterStart.position]++
 
-		//preSpell = spell
-		//preMeets = meets
-		//preLibrary = library
 	}
 	fmt.Println(power)
 }
 
-func main() {
-	RealMain()
-}
