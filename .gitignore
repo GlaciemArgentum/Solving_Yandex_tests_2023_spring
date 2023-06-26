@@ -1,20 +1,5 @@
-# Created by https://www.toptal.com/developers/gitignore/api/macos,goland,go,git
-# Edit at https://www.toptal.com/developers/gitignore?templates=macos,goland,go,git
-
-### Git ###
-# Created by git for backups. To disable backups in Git:
-# $ git config --global mergetool.keepBackup false
-*.orig
-
-# Created by git when using merge tools for conflicts
-*.BACKUP.*
-*.BASE.*
-*.LOCAL.*
-*.REMOTE.*
-*_BACKUP_*.txt
-*_BASE_*.txt
-*_LOCAL_*.txt
-*_REMOTE_*.txt
+.idea
+*.html
 
 ### Go ###
 # If you prefer the allow list template instead of the deny list, see community template:
@@ -161,6 +146,7 @@ fabric.properties
 # Icon must end with two \r
 Icon
 
+
 # Thumbnails
 ._*
 
@@ -183,5 +169,3 @@ Temporary Items
 ### macOS Patch ###
 # iCloud generated files
 *.icloud
-
-# End of https://www.toptal.com/developers/gitignore/api/macos,goland,go,git
